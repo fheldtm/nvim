@@ -1,8 +1,19 @@
+local solarizedOsaka = "craftzdog/solarized-osaka.nvim"
+local Nightfox = "EdenEast/nightfox.nvim"
+local catppuccin = "catppuccin/nvim"
+
 return {
-  "bluz71/vim-nightfly-guicolors",
+  "catppuccin/nvim",
+  name = "catppuccin",
+  lazy = false,
   priority = 1000,
-  config = function ()
-    -- load the colorscheme here
-    vim.cmd([[colorscheme nightfly]])
+  config = function()
+    require("catppuccin").setup({
+      flavour = "frappe", -- latte, frappe, macchiato, mocha
+      term_colors = false,
+    })
+
+    vim.cmd.colorscheme "catppuccin"
+    vim.cmd("hi Normal guibg=None ctermbg=None")
   end,
 }
