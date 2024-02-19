@@ -19,13 +19,5 @@ return {
     })
 
     vim.cmd.colorscheme "catppuccin"
-
-    -- transparent
-    -- vim.cmd("hi Normal guibg=None ctermbg=None")
-    -- vim.cmd("hi NormalNC guibg=None ctermbg=None")
-    -- vim.cmd("hi NvimTreeNormal guibg=None ctermbg=None")
-    -- vim.cmd("hi NvimTreeNormalNC guibg=None ctermbg=None")
-    -- vim.cmd("hi StatusLine guibg=None ctermbg=None")
-    -- vim.cmd("hi StatusLineNC guibg=None ctermbg=None")
   end,
 }
