@@ -20,3 +20,7 @@ vim.keymap.set("n", "sv", "<C-w>v")
 vim.keymap.set("n", "<C-c>", "<Escape>")
 vim.keymap.set("i", "<C-c>", "<Escape>")
 vim.keymap.set("v", "<C-c>", "<Escape>")
+
+-- nvim-tree
+vim.keymap.set("n", ";v", ":NvimTreeFindFile<CR>")
+vim.keymap.set("n", ";c", ":NvimTreeClose<CR>")
