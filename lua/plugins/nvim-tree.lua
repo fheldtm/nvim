@@ -1,3 +1,35 @@
+local previous_window = nil
+
+function GoToPreviousWindow()
+  if previous_window then
+    vim.api.nvim_set_current_win(previous_window)
+  end
+end
+
+function OpenNvimTree()
+  local view = require "nvim-tree.view"
+  local tree_bufnr = view.get_bufnr()
+  local current_bufnr = vim.api.nvim_get_current_buf()
+
+  if (
+    not view.is_visible() or
+    (view.is_visible() and tree_bufnr ~= current_bufnr)
+  ) then
+    previous_window = vim.api.nvim_get_current_win()
+    vim.cmd('NvimTreeFindFile')
+  else
+    GoToPreviousWindow()
+  end
+end
+
+function CloseNvimTree()
+  local view = require "nvim-tree.view"
+  if (view.is_visible()) then
+    GoToPreviousWindow()
+    vim.cmd('NvimTreeClose')
+  end
+end
+
 local function on_attach(bufnr)
   local api = require "nvim-tree.api"
 
@@ -31,7 +63,6 @@ local function on_attach(bufnr)
   vim.keymap.set('n', '[e',      api.node.navigate.diagnostics.prev,  opts('Prev Diagnostic'))
   vim.keymap.set('n', 'F',       api.live_filter.clear,               opts('Live Filter: Clear'))
   vim.keymap.set('n', 'f',       api.live_filter.start,               opts('Live Filter: Start'))
-  vim.keymap.set('n', 'g?',      api.tree.toggle_help,                opts('Help'))
   vim.keymap.set('n', 'gy',      api.fs.copy.absolute_path,           opts('Copy Absolute Path'))
   vim.keymap.set('n', 'ge',      api.fs.copy.basename,                opts('Copy Basename'))
   vim.keymap.set('n', 'H',       api.tree.toggle_hidden_filter,       opts('Toggle Filter: Dotfiles'))
@@ -45,7 +76,6 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'O',       api.node.open.no_window_picker,      opts('Open: No Window Picker'))
   vim.keymap.set('n', 'p',       api.fs.paste,                        opts('Paste'))
   vim.keymap.set('n', 'P',       api.node.navigate.parent,            opts('Parent Directory'))
-  vim.keymap.set('n', 'q',       api.tree.close,                      opts('Close'))
   vim.keymap.set('n', 'r',       api.fs.rename,                       opts('Rename'))
   vim.keymap.set('n', 'R',       api.tree.reload,                     opts('Refresh'))
   vim.keymap.set('n', 'S',       api.tree.search_node,                opts('Search'))
@@ -56,6 +86,10 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'y',       api.fs.copy.filename,                opts('Copy Name'))
   vim.keymap.set('n', 'Y',       api.fs.copy.relative_path,           opts('Copy Relative Path'))
 end
+
+-- nvim-tree
+vim.keymap.set("n", ";v", ":lua OpenNvimTree()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", ";c", ":lua CloseNvimTree()<CR>", { noremap = true, silent = true })
 
 return {
   "nvim-tree/nvim-tree.lua",
