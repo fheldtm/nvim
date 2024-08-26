@@ -46,5 +46,7 @@ return {
     lspconfig.vuels.setup({
       -- Vue LSP 관련 추가 설정이 필요한 경우 여기에 추가
     })
+
+    -- dart
   end
 }
