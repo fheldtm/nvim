@@ -22,6 +22,10 @@ vim.keymap.set("v", "<C-c>", "<Escape>")
 
 vim.keymap.set('n', '<leader>sa', 'ggVG', { desc = "select all" })
 
+-- go to definition
+vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+
 -- save and auto formatting
 vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Quick save", silent = true, noremap = true })
 
@@ -33,12 +37,4 @@ vim.keymap.set(
     vim.lsp.buf.code_action()
   end,
   { desc = "Code Action", noremap = true, silent = true }
-)
-vim.keymap.set(
-  "v",
-  "<leader>ca",
-  function()
-    vim.lsp.buf.code_action()
-  end,
-  { desc = "Visual Mode Code Action", noremap = true, silent = true }
 )

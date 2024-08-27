@@ -42,9 +42,9 @@ opt.splitbelow = true -- split horizontal window to the bottom
 opt.swapfile = false
 
 -- auto formatting when after save file
-vim.api.nvim_create_autocmd("BufWritePost", {
+vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*",
-  callback = function()
-    vim.lsp.buf.format()
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf })
   end,
 })
