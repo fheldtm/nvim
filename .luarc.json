@@ -1,7 +1,8 @@
 {
     "diagnostics.globals": [
         "vim",
-        "mason_registry"
+        "mason_registry",
+        "_lazygit_toggle"
     ],
     "workspace.library": [
         "C:\\Users\\fheld\\AppData\\Local\\nvim",

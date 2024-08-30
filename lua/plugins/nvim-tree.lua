@@ -93,7 +93,7 @@ return {
   config = function()
     require("nvim-tree").setup({
       on_attach = on_attach,
-      view = { width = 50 }
+      view = { width = 30 }
     })
   end
 }
