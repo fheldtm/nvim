@@ -3,7 +3,7 @@ return {
   version = '*',
   config = function()
     local Terminal = require('toggleterm.terminal').Terminal
-    local lazygit  = Terminal:new({
+    local lazygit = Terminal:new({
       cmd = 'lazygit',
       dir = 'git_dir',
       direction = 'float',
