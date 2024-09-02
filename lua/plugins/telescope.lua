@@ -5,28 +5,30 @@ return {
   keys = {
     {
       ";f",
-      function ()
+      function()
         require('telescope.builtin').find_files()
       end,
       "Find Files"
     },
     {
       ";g",
-      function ()
+      function()
         require('telescope.builtin').live_grep()
       end,
       "Live Grep"
     },
     {
       ";b",
-      function ()
-        require('telescope.builtin').buffers()
+      function()
+        require('telescope.builtin').buffers({
+          sort_lastused = true
+        })
       end,
       "Find From Buffers"
     },
     {
       ";t",
-      function ()
+      function()
         require('telescope.builtin').help_tags()
       end,
       "help tags"
