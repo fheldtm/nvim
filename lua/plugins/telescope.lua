@@ -32,6 +32,24 @@ return {
         require('telescope.builtin').help_tags()
       end,
       "help tags"
+    },
+    {
+      ";e",
+      function()
+        require('telescope.builtin').diagnostics({
+          severity = vim.diagnostic.severity.ERROR
+        })
+      end,
+      "Diagnostic"
+    },
+    {
+      ";r",
+      function()
+        require('telescope.builtin').oldfiles({
+          cwd_only = true
+        })
+      end,
+      "Old files"
     }
   }
 }
