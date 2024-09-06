@@ -41,14 +41,6 @@ opt.splitbelow = true -- split horizontal window to the bottom
 -- turn off swapfile
 opt.swapfile = false
 
--- auto formatting when after save file
--- vim.api.nvim_create_autocmd("BufWritePre", {
---   pattern = "*",
---   callback = function(args)
---     require("conform").format({ bufnr = args.buf })
---   end,
--- })
-
 -- shell
 local is_windows = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 if is_windows then
