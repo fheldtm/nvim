@@ -27,5 +27,3 @@ vim.keymap.set({ "i", "s" }, "<C-E>", function()
     return "<C-E>"
   end
 end, { silent = true, expr = true })
-
-print('init snippets keymap')
