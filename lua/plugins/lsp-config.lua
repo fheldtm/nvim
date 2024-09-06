@@ -72,7 +72,7 @@ return {
       end
 
       -- JavaScript/TypeScript 언어 서버 설정
-      lspconfig.tsserver.setup({
+      lspconfig.ts_ls.setup({
         filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         settings = {
           -- JavaScript/TypeScript 설정 (필요에 따라 추가적인 설정 가능)
