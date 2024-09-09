@@ -1,5 +1,8 @@
 local opt = vim.opt -- for conciseness
 
+-- windows check
+local is_windows = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
+
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
 opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
@@ -32,7 +35,7 @@ opt.signcolumn = "yes"  -- show sign column so that text doesn't shift
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
 -- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
+opt.clipboard:append("unnamedplus")
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
@@ -42,7 +45,6 @@ opt.splitbelow = true -- split horizontal window to the bottom
 opt.swapfile = false
 
 -- shell
-local is_windows = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 if is_windows then
   vim.o.shell = "pwsh"
   vim.o.shellcmdflag =
