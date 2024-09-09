@@ -17,7 +17,7 @@ return {
           "eslint",                    -- eslint-lsp
           "html",                      -- html-lsp
           "lua_ls",                    -- lua-language-server
-          "tsserver",                  -- typescript-language-server
+          "ts_ls",                     -- typescript-language-server
           "volar",                     -- vue-language-server
         },
         automatic_installation = true, -- 자동 설치 활성화
