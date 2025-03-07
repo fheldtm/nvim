@@ -15,7 +15,7 @@ vim.keymap.set("n", "sj", "<C-w>j")
 vim.keymap.set("n", "sk", "<C-w>k")
 vim.keymap.set("n", "sl", "<C-w>l")
 
-vim.keymap.set("n", "ss", "<C-w>s")
+vim.keymap.set("n", "sp", "<C-w>s")
 vim.keymap.set("n", "sv", "<C-w>v")
 
 vim.keymap.set("n", "<C-c>", "<Escape>")
@@ -54,7 +54,16 @@ end, {
 })
 
 -- diagnostic
-vim.keymap.set("n", "<Leader>df", vim.diagnostic.open_float, { noremap = true, silent = true })
-vim.keymap.set("n", "<Leader>dn", vim.diagnostic.goto_next, { noremap = true, silent = true })
-vim.keymap.set("n", "<Leader>dp", vim.diagnostic.goto_prev, { noremap = true, silent = true })
-vim.keymap.set("n", "<Leader>dl", vim.diagnostic.setloclist, { noremap = true, silent = true })
+vim.keymap.set('n', '<Leader>df', vim.diagnostic.open_float, { noremap = true, silent = true })
+vim.keymap.set('n', '<Leader>dn', vim.diagnostic.goto_next, { noremap = true, silent = true })
+vim.keymap.set('n', '<Leader>dp', vim.diagnostic.goto_prev, { noremap = true, silent = true })
+vim.keymap.set('n', '<Leader>dl', vim.diagnostic.setloclist, { noremap = true, silent = true })
+
+-- neovide
+---@diagnostic disable-next-line: undefined-field
+if vim.g.neovide then
+  vim.keymap.set("n", "<C-c>", '"*y :let @+=@*<CR>', { noremap = true, silent = true })
+  vim.keymap.set("v", "<C-c>", '"*y :let @+=@*<CR>', { noremap = true, silent = true })
+  vim.keymap.set("n", "<C-v>", '"+p', { noremap = true, silent = true })
+  vim.keymap.set("v", "<C-v>", '"+p', { noremap = true, silent = true })
+end
