@@ -22,7 +22,7 @@ vim.keymap.set("n", "<C-c>", "<Escape>")
 vim.keymap.set("i", "<C-c>", "<Escape>")
 vim.keymap.set("v", "<C-c>", "<Escape>")
 
-vim.keymap.set('n', '<leader>sa', 'ggVG', { desc = "select all" })
+vim.keymap.set("n", "<leader>sa", "ggVG", { desc = "select all" })
 
 -- go to definition
 vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true })
@@ -54,7 +54,7 @@ end, {
 })
 
 -- diagnostic
-vim.keymap.set('n', '<Leader>df', vim.diagnostic.open_float, { noremap = true, silent = true })
-vim.keymap.set('n', '<Leader>dn', vim.diagnostic.goto_next, { noremap = true, silent = true })
-vim.keymap.set('n', '<Leader>dp', vim.diagnostic.goto_prev, { noremap = true, silent = true })
-vim.keymap.set('n', '<Leader>dl', vim.diagnostic.setloclist, { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>df", vim.diagnostic.open_float, { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>dn", vim.diagnostic.goto_next, { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>dp", vim.diagnostic.goto_prev, { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>dl", vim.diagnostic.setloclist, { noremap = true, silent = true })

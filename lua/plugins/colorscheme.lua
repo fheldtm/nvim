@@ -1,3 +1,4 @@
+-- neovim의 색상 테마를 설정해주는 파일
 return {
   {
     "olimorris/onedarkpro.nvim",

@@ -3,6 +3,9 @@ local opt = vim.opt -- for conciseness
 -- windows check
 local is_windows = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 
+-- mouse
+vim.opt.mouse = ""
+
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
 opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
