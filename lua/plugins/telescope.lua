@@ -1,3 +1,5 @@
+-- https://github.com/nvim-telescope/telescope.nvim
+-- telescope를 사용하여 파일 찾기, 새 파일 찾기, 버퍼 찾기, 도움말 태그 찾기, 오래된 파일 찾기 등을 사용할 수 있습니다.
 return {
   'nvim-telescope/telescope.nvim',
   tag = '0.1.8',
