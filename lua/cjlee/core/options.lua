@@ -37,8 +37,24 @@ opt.signcolumn = "yes"  -- show sign column so that text doesn't shift
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
--- clipboard
-opt.clipboard:append("unnamedplus")
+-- clipboard (OSC52 지원 - Copy만, 안정적 방법)
+vim.g.clipboard = {
+  name = 'osc52-write',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = function()
+      return vim.split(vim.fn.getreg('"'), '\n')
+    end,
+    ['*'] = function()
+      return vim.split(vim.fn.getreg('"'), '\n')
+    end,
+  },
+}
+
+opt.clipboard = "unnamedplus"
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
