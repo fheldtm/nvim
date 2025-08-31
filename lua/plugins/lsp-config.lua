@@ -17,10 +17,27 @@ return {
           "eslint",                    -- eslint-lsp
           "html",                      -- html-lsp
           "lua_ls",                    -- lua-language-server
+          "ruby_lsp",                  -- ruby-lsp
+          "solargraph",                -- solargraph ruby language server
           "ts_ls",                     -- typescript-language-server
-          "volar",                     -- vue-language-server
+          "vls",                       -- vue-language-server
         },
         automatic_installation = true, -- 자동 설치 활성화
+      }
+    end
+  },
+
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    config = function()
+      require("mason-tool-installer").setup {
+        ensure_installed = {
+          "prettier", -- prettier formatter
+          "stylua",   -- lua formatter
+        },
+        auto_update = false,
+        run_on_start = true,
       }
     end
   },
@@ -49,9 +66,13 @@ return {
       })
 
       -- vue_language_server mason registry path
-      local vue_language_server_path = require('mason-registry')
-          .get_package("vue-language-server")
-          :get_install_path() .. "/node_modules/@vue/language-server"
+      local mason_registry = require('mason-registry')
+      local vue_language_server_path = ""
+      if mason_registry.is_installed("vue-language-server") then
+        vue_language_server_path = mason_registry
+            .get_package("vue-language-server")
+            :get_install_path() .. "/node_modules/@vue/language-server"
+      end
 
       -- 현재 프로젝트 폴더의 typescript 경로를 찾기
       local function find_typescript_sdk(root_dir)
@@ -78,13 +99,13 @@ return {
           -- JavaScript/TypeScript 설정 (필요에 따라 추가적인 설정 가능)
         },
         init_options = {
-          plugins = {
+          plugins = vue_language_server_path ~= "" and {
             {
               name = "@vue/typescript-plugin",
               location = vue_language_server_path,
               languages = { "vue" },
             },
-          },
+          } or {},
         },
         on_new_config = function(new_config, new_root_dir)
           -- TypeScript SDK 경로 지정
@@ -110,7 +131,7 @@ return {
         -- HTML LSP 관련 추가 설정이 필요한 경우 여기에 추가
       })
 
-      lspconfig.volar.setup({
+      lspconfig.vls.setup({
         on_new_config = function(new_config, new_root_dir)
           -- TypeScript SDK 경로 지정
           local tsdk_path = find_typescript_sdk(new_root_dir)
@@ -118,6 +139,25 @@ return {
             new_config.init_options.typescript.tsdk = tsdk_path
           end
         end
+      })
+
+      -- Ruby LSP 서버 설정
+      lspconfig.ruby_lsp.setup({
+        filetypes = { "ruby" },
+        settings = {}
+      })
+
+      -- Solargraph (Ruby) 언어 서버 설정
+      lspconfig.solargraph.setup({
+        filetypes = { "ruby" },
+        settings = {
+          solargraph = {
+            diagnostics = true,
+            completion = true,
+            hover = true,
+            formatting = false -- rubocop 등 외부 포맷터 사용 시 false로 설정
+          }
+        }
       })
     end
   }
