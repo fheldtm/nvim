@@ -93,7 +93,56 @@ return {
   config = function()
     require("nvim-tree").setup({
       on_attach = on_attach,
-      view = { width = 30 }
+      view = { width = 30 },
+      filters = {
+        dotfiles = false,        -- .으로 시작하는 파일들 보이기
+        git_clean = false,       -- git clean 파일들도 보이기
+        no_buffer = false,       -- 버퍼와 관련 없는 파일들도 보이기
+        custom = {},             -- 커스텀 필터 비활성화
+        exclude = {},            -- 제외할 파일 패턴 없음
+      },
+      git = {
+        enable = true,
+        ignore = false,          -- .gitignore 무시하고 모든 파일 표시
+        show_on_dirs = true,     -- 디렉토리에도 git 상태 표시
+        show_on_open_dirs = true,
+        timeout = 400,
+      },
+      renderer = {
+        add_trailing = false,
+        group_empty = false,
+        highlight_git = true,
+        full_name = false,
+        highlight_opened_files = "none",
+        highlight_modified = "none",
+        root_folder_label = ":~:s?$?/..?",
+        indent_width = 2,
+        indent_markers = {
+          enable = false,
+          inline_arrows = true,
+          icons = {
+            corner = "└",
+            edge = "│",
+            item = "│",
+            bottom = "─",
+            none = " ",
+          },
+        },
+        icons = {
+          webdev_colors = true,
+          git_placement = "before",
+          modified_placement = "after",
+          padding = " ",
+          symlink_arrow = " ➛ ",
+          show = {
+            file = true,
+            folder = true,
+            folder_arrow = true,
+            git = true,
+            modified = true,
+          },
+        },
+      },
     })
   end
 }

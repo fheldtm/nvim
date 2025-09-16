@@ -67,3 +67,7 @@ if vim.g.neovide then
   vim.keymap.set("n", "<C-v>", '"+p', { noremap = true, silent = true })
   vim.keymap.set("v", "<C-v>", '"+p', { noremap = true, silent = true })
 end
+
+-- Key Chords
+vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
+vim.keymap.set('i', 'io', '<Enter>', { noremap = true, silent = true })

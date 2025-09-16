@@ -4,6 +4,25 @@ return {
   'nvim-telescope/telescope.nvim',
   tag = '0.1.8',
   dependencies = { 'nvim-lua/plenary.nvim' },
+  config = function()
+    require('telescope').setup({
+      defaults = {
+        -- node_modules만 무시, 나머지는 모두 접근 가능
+        file_ignore_patterns = {
+          "node_modules/",
+          ".git/",
+        },
+        -- hidden 파일도 표시
+        hidden = true,
+      },
+      pickers = {
+        find_files = {
+          -- 숨김 파일 포함
+          hidden = true,
+        }
+      }
+    })
+  end,
   keys = {
     {
       ";f",

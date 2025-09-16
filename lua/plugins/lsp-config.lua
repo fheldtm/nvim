@@ -17,8 +17,9 @@ return {
           "eslint",                    -- eslint-lsp
           "html",                      -- html-lsp
           "lua_ls",                    -- lua-language-server
-          "ts_ls",                     -- typescript-language-server
-          "vue_ls",                    -- vue-language-server
+          "vtsls",                     -- typescript language server
+          "vue_ls",                    -- vue language server
+          "tailwindcss",               -- tailwindcss-language-server
         },
         automatic_installation = true, -- 자동 설치 활성화
       }
@@ -41,11 +42,15 @@ return {
 
   {
     "neovim/nvim-lspconfig",
+    dependencies = { "saghen/blink.cmp" },
     config = function()
       local lspconfig = require("lspconfig")
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+
 
       -- Lua 언어 서버 설정
       lspconfig.lua_ls.setup({
+        capabilities = capabilities,
         settings = {
           Lua = {
             diagnostics = {
@@ -81,51 +86,113 @@ return {
         end
       end
 
-      -- JavaScript/TypeScript 언어 서버 설정
-      lspconfig.ts_ls.setup({
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      -- Nuxt 프로젝트 감지
+      local function is_nuxt_project(root_dir)
+        return vim.fn.filereadable(root_dir .. '/nuxt.config.js') == 1 or
+            vim.fn.filereadable(root_dir .. '/nuxt.config.ts') == 1 or
+            vim.fn.isdirectory(root_dir .. '/.nuxt') == 1
+      end
+
+      -- VTSLS 설정 (Vue TypeScript 지원)
+      lspconfig.vtsls.setup({
+        capabilities = capabilities,
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
         settings = {
-          -- JavaScript/TypeScript 설정 (필요에 따라 추가적인 설정 가능)
+          typescript = {
+            inlayHints = {
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = true },
+              variableTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+            },
+          },
         },
-        init_options = {
-          typescript = {},
-        },
-        on_new_config = function(new_config, new_root_dir)
-          -- TypeScript SDK 경로 지정
-          local tsdk_path = find_typescript_sdk(new_root_dir)
-          if tsdk_path then
-            new_config.init_options.typescript.tsdk = tsdk_path
-          end
-        end,
       })
 
       -- JavaScript 및 TypeScript ESLint 설정
       lspconfig.eslint.setup({
+        capabilities = capabilities,
         -- ESLint 관련 추가 설정이 필요한 경우 여기에 추가
       })
 
       -- Emmet Language Server 설정
       lspconfig.emmet_language_server.setup({
+        capabilities = capabilities,
         filetypes = { "html", "css", "javascript", "typescript", "vue", "markdown" }, -- Emmet 지원 파일 유형
       })
 
       -- HTML LSP 서버 설정
       lspconfig.html.setup({
+        capabilities = capabilities,
         -- HTML LSP 관련 추가 설정이 필요한 경우 여기에 추가
       })
 
-      -- Vue Language Server 설정 
+      -- Tailwind CSS Language Server 설정
+      lspconfig.tailwindcss.setup({
+        capabilities = capabilities,
+        filetypes = {
+          "html", "css", "scss", "sass", "postcss", "javascript", "javascriptreact",
+          "typescript", "typescriptreact", "vue", "svelte"
+        },
+      })
+
+      -- Vue Language Server (Volar) 설정
       lspconfig.volar.setup({
+        capabilities = capabilities,
         filetypes = { "vue" },
+        root_dir = lspconfig.util.root_pattern("nuxt.config.js", "nuxt.config.ts", "vue.config.js", "package.json"),
         init_options = {
+          vue = {
+            hybridMode = false,
+          },
           typescript = {
             tsdk = ""
-          }
+          },
+          languageFeatures = {
+            implementation = true,
+            references = true,
+            definition = true,
+            typeDefinition = true,
+            callHierarchy = true,
+            hover = true,
+            rename = true,
+            renameFileRefactoring = true,
+            signatureHelp = true,
+            codeAction = true,
+            workspaceSymbol = true,
+            completion = {
+              defaultTagNameCase = "both",
+              defaultAttrNameCase = "kebabCase",
+            },
+          },
         },
         on_new_config = function(new_config, new_root_dir)
           local tsdk_path = find_typescript_sdk(new_root_dir)
           if tsdk_path then
             new_config.init_options.typescript.tsdk = tsdk_path
+          end
+
+          -- Nuxt 프로젝트인 경우 추가 설정
+          if is_nuxt_project(new_root_dir) then
+            -- Nuxt 특화 설정
+            new_config.init_options.vue = vim.tbl_deep_extend("force", new_config.init_options.vue or {}, {
+              hybridMode = false,
+              -- Nuxt auto-imports 지원
+              additionalExtensions = { ".vue" },
+            })
+
+            -- .nuxt/tsconfig.json 경로 명시적 지정
+            local nuxt_tsconfig = new_root_dir .. "/.nuxt/tsconfig.json"
+            if vim.fn.filereadable(nuxt_tsconfig) == 1 then
+              new_config.init_options.typescript = vim.tbl_deep_extend("force", new_config.init_options.typescript or {}, {
+                tsdk = tsdk_path,
+                -- Nuxt의 생성된 tsconfig 사용
+                preferences = {
+                  includePackageJsonAutoImports = "auto",
+                },
+              })
+            end
           end
         end
       })
