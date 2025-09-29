@@ -124,7 +124,13 @@ return {
         cmd = { 'emmet-language-server', '--stdio' },
         root_markers = { 'package.json', '.git' },
         capabilities = capabilities,
-        filetypes = { "html", "css", "javascript", "typescript", "vue", "markdown" },
+        filetypes = { "html", "css", "scss", "sass", "javascript", "typescript", "vue", "svelte", "markdown" },
+        init_options = {
+          includeLanguages = {
+            vue = "html",
+            ["vue-html"] = "html",
+          }
+        }
       }
 
       -- HTML LSP 서버 설정
