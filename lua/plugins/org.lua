@@ -6,23 +6,23 @@ return {
     ft = { 'org' },
     config = function()
       require('orgmode').setup({
-        org_agenda_files = '~/wiki/**/*',
-        org_default_notes_file = '~/wiki/inbox.org',
+        org_agenda_files = '~/notes/**/*',
+        org_default_notes_file = '~/notes/inbox.org',
         org_capture_templates = {
           t = {
             description = 'Todo',
-            template = '* TODO %?\n  %u',
-            target = '~/wiki/inbox.org'
+            template = '* TODO %?\n  %u\n  %a',
+            target = '~/notes/inbox.org'
           },
           n = {
             description = 'Note',
             template = '* %?\n  %U\n  %a',
-            target = '~/wiki/notes.org'
+            target = '~/notes/notes.org'
           },
           j = {
             description = 'Journal',
-            template = '* %?\n  %u\n  %a',
-            target = '~/wiki/journal.org'
+            template = '* %U\n  %?',
+            target = '~/notes/journal.org'
           }
         }
       })
@@ -46,7 +46,7 @@ return {
     },
     config = function()
       require("org-roam").setup({
-        directory = "~/wiki",
+        directory = "~/notes",
       })
     end
   }

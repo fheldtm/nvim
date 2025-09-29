@@ -41,17 +41,6 @@ vim.keymap.set(
   { desc = "Code Action", noremap = true, silent = true }
 )
 
-vim.keymap.set("n", "<leader>q", function()
-  require("quicker").toggle()
-end, {
-  desc = "Toggle quickfix",
-})
-
-vim.keymap.set("n", "<leader>l", function()
-  require("quicker").toggle({ loclist = true })
-end, {
-  desc = "Toggle loclist",
-})
 
 -- diagnostic
 vim.keymap.set('n', '<Leader>df', vim.diagnostic.open_float, { noremap = true, silent = true })
@@ -70,4 +59,3 @@ end
 
 -- Key Chords
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
-vim.keymap.set('i', 'io', '<Enter>', { noremap = true, silent = true })
