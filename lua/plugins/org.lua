@@ -11,7 +11,7 @@ return {
         org_capture_templates = {
           t = {
             description = 'Todo',
-            template = '* TODO %?\n  %u\n  %a',
+            template = '* TODO %?',
             target = '~/notes/inbox.org'
           },
           n = {
@@ -27,9 +27,38 @@ return {
         }
       })
 
+      -- Custom refile to projects folder
+      local function refile_to_project()
+        vim.ui.input({ prompt = 'Project name: ' }, function(project_name)
+          if not project_name or project_name == '' then
+            return
+          end
+
+          local target_path = 'projects/' .. project_name .. '.org'
+          local target_file = vim.fn.expand('~/notes/' .. target_path)
+
+          -- Create file if it doesn't exist
+          if vim.fn.filereadable(target_file) == 0 then
+            vim.fn.writefile({}, target_file)
+          end
+
+          -- Trigger orgmode's refile with the target path pre-filled
+          require('orgmode').action('capture.refile_headline_to_destination')
+
+          -- Auto-fill the path after a short delay
+          vim.defer_fn(function()
+            vim.api.nvim_feedkeys(target_path .. vim.api.nvim_replace_termcodes('<CR>', true, false, true), 'n', false)
+          end, 100)
+        end)
+      end
+
       -- Org mode keymaps
       vim.keymap.set('n', '<leader>oim', '<cmd>Org indent_mode<cr>', {
         desc = 'Toggle org indent mode',
+        silent = true
+      })
+      vim.keymap.set('n', '<leader>oR', refile_to_project, {
+        desc = 'Refile to project',
         silent = true
       })
     end,
@@ -38,6 +67,7 @@ return {
   -- org roam
   {
     "chipsenkbeil/org-roam.nvim",
+    enabled = false,
     tag = "0.1.1",
     dependencies = {
       {
