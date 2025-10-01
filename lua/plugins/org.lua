@@ -1,4 +1,24 @@
 return {
+  -- org bullets
+  {
+    'akinsho/org-bullets.nvim',
+    ft = { 'org' },
+    config = function()
+      require('org-bullets').setup({
+        concealcursor = false,
+        symbols = {
+          list = "•",
+          headlines = { "◉", "○", "✸", "✿" },
+          checkboxes = {
+            half = { "-", "@org.checkbox.halfchecked" },
+            done = { "✓", "@org.keyword.done" },
+            todo = { " ", "@org.keyword.todo" },
+          },
+        }
+      })
+    end
+  },
+
   -- orgmode
   {
     'nvim-orgmode/orgmode',
@@ -8,6 +28,13 @@ return {
       require('orgmode').setup({
         org_agenda_files = '~/notes/**/*',
         org_default_notes_file = '~/notes/inbox.org',
+        org_startup_indented = true,
+        org_hide_leading_stars = true,
+        mappings = {
+          org = {
+            org_refile = false, -- Disable default refile mapping
+          }
+        },
         org_capture_templates = {
           t = {
             description = 'Todo',
@@ -16,15 +43,15 @@ return {
           },
           n = {
             description = 'Note',
-            template = '* %?\n  %U\n  %a',
+            template = '* %?\n%U\n%a',
             target = '~/notes/notes.org'
           },
           j = {
             description = 'Journal',
-            template = '* %U\n  %?',
+            template = '* %U\n%?',
             target = '~/notes/journal.org'
           }
-        }
+        },
       })
 
       -- Custom refile to projects folder
@@ -53,14 +80,42 @@ return {
       end
 
       -- Org mode keymaps
-      vim.keymap.set('n', '<leader>oim', '<cmd>Org indent_mode<cr>', {
-        desc = 'Toggle org indent mode',
-        silent = true
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'org',
+        callback = function()
+          vim.keymap.set('n', '<leader>oim', '<cmd>Org indent_mode<cr>', {
+            desc = 'Toggle org indent mode',
+            silent = true,
+            buffer = true
+          })
+          -- Custom refile keymaps
+          vim.keymap.set('n', '<leader>or', function()
+            require('orgmode').action('capture.refile_headline_to_destination')
+          end, {
+            desc = 'Org refile',
+            silent = true,
+            buffer = true
+          })
+          vim.keymap.set('n', '<leader>orp', refile_to_project, {
+            desc = 'Refile to project',
+            silent = true,
+            buffer = true
+          })
+          -- Checkbox toggle keymap
+          vim.keymap.set('n', '<CR>', function()
+            require('orgmode').action('org_mappings.toggle_checkbox')
+          end, {
+            desc = 'Toggle checkbox',
+            silent = true,
+            buffer = true
+          })
+        end
       })
-      vim.keymap.set('n', '<leader>oR', refile_to_project, {
-        desc = 'Refile to project',
-        silent = true
-      })
+
+      -- Org Notes Terminal
+      vim.keymap.set('n', '<leader>on', '<cmd>lua _notes_toggle()<CR>',
+        { noremap = true, silent = true, desc = 'Open notes' }
+      )
     end,
   },
 
