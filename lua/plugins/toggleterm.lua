@@ -20,11 +20,30 @@ return {
       end,
     })
 
+    local notes = Terminal:new({
+      cmd = 'nvim ~/notes',
+      dir = vim.fn.expand('~/notes'),
+      direction = 'float',
+      float_opts = {
+        border = 'double',
+      },
+      on_open = function(term)
+        vim.api.nvim_buf_set_keymap(term.bufnr, 'n', 'q', '<cmd>close<CR>', { noremap = true, silent = true })
+        vim.keymap.set('t', '<esc>', '<esc>', { noremap = true, silent = true })
+      end,
+      on_close = function()
+        vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
+      end,
+    })
+
     function _lazygit_toggle()
       lazygit:toggle()
     end
 
-    vim.keymap.set('n', '<leader>g', '<cmd>lua _lazygit_toggle()<CR>', { noremap = true, silent = true })
+    function _notes_toggle()
+      notes:toggle()
+    end
+
     vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 
     vim.keymap.set('n', '<C-\\><C-\\>', '<cmd>:ToggleTerm<CR>', { noremap = true, silent = true })
