@@ -29,7 +29,7 @@ return {
         ['<C-n>'] = { 'select_next', 'fallback' },
         ['<C-p>'] = { 'select_prev', 'fallback' },
         ['<CR>'] = { 'accept', 'fallback' },
-        ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        ['<C-e>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<Esc>'] = { 'hide', 'fallback' },
       },
       appearance = { 

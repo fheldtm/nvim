@@ -47,6 +47,28 @@ return {
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      -- LSP attach 시 키맵 설정
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local bufnr = args.buf
+          local opts = { buffer = bufnr, silent = true }
+
+          -- Leader+ca: Code Action (quick fix)
+          vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action,
+            vim.tbl_extend('force', opts, { desc = 'LSP: Code Action' }))
+
+          -- 추가 유용한 LSP 키맵
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition,
+            vim.tbl_extend('force', opts, { desc = 'LSP: Go to Definition' }))
+          vim.keymap.set('n', 'gr', vim.lsp.buf.references,
+            vim.tbl_extend('force', opts, { desc = 'LSP: References' }))
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover,
+            vim.tbl_extend('force', opts, { desc = 'LSP: Hover Documentation' }))
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename,
+            vim.tbl_extend('force', opts, { desc = 'LSP: Rename' }))
+        end,
+      })
+
       -- Lua 언어 서버 설정 (modern vim.lsp.config API)
       vim.lsp.config.lua_ls = {
         cmd = { 'lua-language-server' },
