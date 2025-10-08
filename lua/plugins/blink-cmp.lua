@@ -24,12 +24,13 @@ return {
     },
     version = '1.*',
     opts = {
-      keymap = { 
+      keymap = {
         preset = 'default',
         ['<C-n>'] = { 'select_next', 'fallback' },
         ['<C-p>'] = { 'select_prev', 'fallback' },
         ['<CR>'] = { 'accept', 'fallback' },
-        ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' }
+        ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        ['<Esc>'] = { 'hide', 'fallback' },
       },
       appearance = { 
         nerd_font_variant = 'mono' 
