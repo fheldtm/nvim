@@ -90,7 +90,11 @@ vim.keymap.set("n", ";c", ":lua CloseNvimTree()<CR>", { noremap = true, silent =
 
 return {
   "nvim-tree/nvim-tree.lua",
+  dependencies = { "echasnovski/mini.icons" },
   config = function()
+    -- mini.icons를 nvim-web-devicons처럼 사용하도록 설정
+    require('mini.icons').mock_nvim_web_devicons()
+
     require("nvim-tree").setup({
       on_attach = on_attach,
       view = { width = 30 },
