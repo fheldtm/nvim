@@ -17,7 +17,9 @@ opt.expandtab = true  -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
 -- line wrapping
-opt.wrap = false -- disable line wrapping
+opt.wrap = true -- enable line wrapping
+opt.linebreak = true -- wrap lines at convenient points
+opt.showbreak = "↪ " -- show this character at the start of wrapped lines
 
 -- search settings
 opt.ignorecase = true -- ignore case when searching
@@ -38,7 +40,7 @@ opt.signcolumn = "yes"  -- show sign column so that text doesn't shift
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
 -- clipboard
-opt.clipboard:append("unnamedplus")
+opt.clipboard = "unnamedplus"
 
 -- split windows
 opt.splitright = true -- split vertical window to the right

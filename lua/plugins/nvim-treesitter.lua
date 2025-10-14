@@ -23,7 +23,7 @@ return {
         "scss",
         "sql",
         "typescript",
-        "vue",
+        "vue"
       },
 
       -- `ensure_installed` 목록에 있는 파서를 동기적으로 설치할지 여부를 설정합니다.

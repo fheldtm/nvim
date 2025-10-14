@@ -33,6 +33,11 @@ return {
         notify = {
           enabled = false
         },
+        lsp = {
+          progress = {
+            enabled = false,  -- LSP progress 알림 비활성화
+          },
+        },
         -- you can enable a preset for easier configuration
         presets = {
           bottom_search = false,        -- use a classic bottom cmdline for search
