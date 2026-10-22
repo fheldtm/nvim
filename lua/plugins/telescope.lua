@@ -1,76 +1,19 @@
--- https://github.com/nvim-telescope/telescope.nvim
--- telescope를 사용하여 파일 찾기, 새 파일 찾기, 버퍼 찾기, 도움말 태그 찾기, 오래된 파일 찾기 등을 사용할 수 있습니다.
 return {
-  'nvim-telescope/telescope.nvim',
-  tag = '0.1.8',
-  dependencies = { 'nvim-lua/plenary.nvim' },
-  config = function()
-    require('telescope').setup({
-      defaults = {
-        -- node_modules만 무시, 나머지는 모두 접근 가능
-        file_ignore_patterns = {
-          "node_modules/",
-          ".git/",
-        },
-        -- hidden 파일도 표시
-        hidden = true,
-      },
-      pickers = {
-        find_files = {
-          -- 숨김 파일 포함
-          hidden = true,
-        }
-      }
-    })
-  end,
+  "nvim-telescope/telescope.nvim",
+  branch = "master",
+  dependencies = { "nvim-lua/plenary.nvim" },
+  cmd = "Telescope",
   keys = {
-    {
-      ";f",
-      function()
-        require('telescope.builtin').find_files()
-      end,
-      "Find Files"
-    },
-    {
-      ";g",
-      function()
-        require('telescope.builtin').live_grep()
-      end,
-      "Live Grep"
-    },
-    {
-      ";b",
-      function()
-        require('telescope.builtin').buffers({
-          sort_lastused = true
-        })
-      end,
-      "Find From Buffers"
-    },
-    {
-      ";t",
-      function()
-        require('telescope.builtin').help_tags()
-      end,
-      "help tags"
-    },
-    {
-      ";e",
-      function()
-        require('telescope.builtin').diagnostics({
-          severity = vim.diagnostic.severity.ERROR
-        })
-      end,
-      "Diagnostic"
-    },
-    {
-      ";r",
-      function()
-        require('telescope.builtin').oldfiles({
-          cwd_only = true
-        })
-      end,
-      "Old files"
-    }
-  }
+    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+    { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
+    { "<leader>fw", "<cmd>Telescope grep_string<cr>", desc = "Grep word" },
+    { "<leader>fb", "<cmd>Telescope buffers sort_lastused=true<cr>", desc = "Buffers" },
+    { "<leader>fr", "<cmd>Telescope oldfiles cwd_only=true<cr>", desc = "Recent files" },
+    { "<leader>fd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
+    { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
+  },
+  opts = {
+    defaults = { file_ignore_patterns = { "node_modules/", ".git/" } },
+    pickers = { find_files = { hidden = true } },
+  },
 }
