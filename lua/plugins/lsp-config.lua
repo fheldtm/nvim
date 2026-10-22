@@ -18,8 +18,8 @@ return {
           "html",                      -- html-lsp
           "lua_ls",                    -- lua-language-server
           "pyright",                   -- python-lsp
-          "vtsls",                     -- typescript language server
-          "vue_ls",                    -- vue language server
+          "vtsls",                     -- Vue TypeScript language server
+          "volar",                     -- Vue language server (Volar)
           "tailwindcss",               -- tailwindcss-language-server
         },
         automatic_installation = true, -- 자동 설치 활성화
@@ -116,23 +116,13 @@ return {
             vim.fn.isdirectory(root_dir .. '/.nuxt') == 1
       end
 
-      -- VTSLS 설정 (Vue TypeScript 지원)
+
+      -- VTSLS (Vue TypeScript Language Server) 설정
       vim.lsp.config.vtsls = {
         cmd = { 'vtsls', '--stdio' },
-        root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+        root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
         capabilities = capabilities,
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
-        settings = {
-          typescript = {
-            inlayHints = {
-              parameterNames = { enabled = "literals" },
-              parameterTypes = { enabled = true },
-              variableTypes = { enabled = true },
-              propertyDeclarationTypes = { enabled = true },
-              functionLikeReturnTypes = { enabled = true },
-            },
-          },
-        },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
       }
 
       -- JavaScript 및 TypeScript ESLint 설정
@@ -177,65 +167,28 @@ return {
         },
       }
 
-      -- Vue Language Server (Volar) 설정
+      -- Volar 설정
       vim.lsp.config.volar = {
         cmd = { 'vue-language-server', '--stdio' },
         capabilities = capabilities,
-        filetypes = { "vue" },
-        root_markers = { "nuxt.config.js", "nuxt.config.ts", "vue.config.js", "package.json", ".git" },
-        init_options = function()
-          local root_dir = vim.fs.root(0, { "package.json", ".git" }) or vim.fn.getcwd()
-          local tsdk_path = find_typescript_sdk(root_dir)
+        filetypes = { "vue", "javascript", "typescript" },
+        root_markers = { "nuxt.config.js", "nuxt.config.ts", "vue.config.js", "vue.config.ts", "package.json", ".git" },
+        on_new_config = function(new_config, new_root_dir)
+          local tsdk_path = find_typescript_sdk(new_root_dir)
+          local is_nuxt = is_nuxt_project(new_root_dir)
 
-          local init_opts = {
-            vue = {
-              hybridMode = false,
-            },
+          new_config.init_options = {
             typescript = {
               tsdk = tsdk_path or ""
-            },
-            languageFeatures = {
-              implementation = true,
-              references = true,
-              definition = true,
-              typeDefinition = true,
-              callHierarchy = true,
-              hover = true,
-              rename = true,
-              renameFileRefactoring = true,
-              signatureHelp = true,
-              codeAction = true,
-              workspaceSymbol = true,
-              completion = {
-                defaultTagNameCase = "both",
-                defaultAttrNameCase = "kebabCase",
-              },
-            },
+            }
           }
 
           -- Nuxt 프로젝트인 경우 추가 설정
-          if is_nuxt_project(root_dir) then
-            -- Nuxt 특화 설정 (vim.tbl_extend replaces vim.tbl_deep_extend)
-            init_opts.vue = vim.tbl_extend("force", init_opts.vue or {}, {
-              hybridMode = false,
-              -- Nuxt auto-imports 지원
-              additionalExtensions = { ".vue" },
-            })
-
-            -- .nuxt/tsconfig.json 경로 명시적 지정
-            local nuxt_tsconfig = root_dir .. "/.nuxt/tsconfig.json"
-            if vim.fn.filereadable(nuxt_tsconfig) == 1 then
-              init_opts.typescript = vim.tbl_extend("force", init_opts.typescript or {}, {
-                tsdk = tsdk_path,
-                -- Nuxt의 생성된 tsconfig 사용
-                preferences = {
-                  includePackageJsonAutoImports = "auto",
-                },
-              })
-            end
+          if is_nuxt then
+            new_config.init_options.nuxt = {
+              dotNuxtPath = new_root_dir .. "/.nuxt"
+            }
           end
-
-          return init_opts
         end,
       }
 
